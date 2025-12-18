@@ -1,0 +1,24 @@
+enum4linux x.x.x.x
+enum4linux -a x.x.x.x
+
+(list smb shares ex)
+smbclient -L //192.168.x.x/
+smbclient -L //192.168.x.x/IPC$
+
+(NULL sessions ex)
+smbclient //192.168.x.x/IPC$ -N
+
+(message signing enabled but not required)
+smbmap -H 192.168.152.159 -u guest -d zeus.corp
+smbclient //192.168.231.159/IPC$ -U zeus.corp/guest
+
+
+nmap -p139,445 --script=smb-enum-shares $IP
+nmap -v -p 139,445 -oG smb.txt 192.168.50.1-254
+nmap -v -p 139,445 --script smb-os-discovery 192.168.50.152
+
+sudo nbtscan -r 192.168.50.0/24
+
+ls -1 /usr/share/nmap/scripts/smb*
+
+(C:/) net view \\dc01 /all

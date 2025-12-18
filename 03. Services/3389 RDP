@@ -1,0 +1,21 @@
+use xfreerdp or rdesktop
+xfreerdp /u:username /p:password /v:x.x.x.x(:port) /d:domain.com /workarea /smart-sizing /cert:ignore
+xfreerdp /u:username /p:password /v:x.x.x.x +clipboard +drive:kali,/home/kali/Downloads
+
+rdesktop
+rdesktop <IP>  <== login w/out username//password to see what the OS version is.
+rdesktop -u <username> <IP>
+rdesktop -d <domain> -u <username> -p <password> <IP>
+xfreerdp [/d:domain] /u:<username> /p:<password> /v:<IP>
+xfreerdp [/d:domain] /u:<username> /pth:<hash> /v:<IP> #Pass the hash
+
+To enable RDP through powershell
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+Evil-winrm
+when there is port 5985 open you can use evil-winrm with username and password to connect. even ntlm or hash can work. look for those in RDP or remote desktop related folders or files.
+
+References
+https://www.hackingarticles.in/a-detailed-guide-on-evil-winrm/
+https://github.com/Hackplayers/evil-winrm

@@ -1,0 +1,7 @@
+MariaDB commands
+show databases;
+use databasename;
+select * from users;
+
+https://gist.github.com/Jonasdero/b4c8a5e284e13aaf456f44f5dc60257e
+https://bertvv.github.io/cheat-sheets/MySQL-MariaDB.html

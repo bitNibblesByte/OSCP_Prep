@@ -1,0 +1,22 @@
+explore NTLM authentication in the context of Active Directory
+NTLM authentication is used when a client authenticates to a server by IP address (instead of by hostname),1 or if the user attempts to authenticate to a hostname that is not registered on the Active Directory-integrated DNS server
+third-party applications may choose to use NTLM authentication instead of Kerberos.
+NTLM authentication protocol consists of seven steps
+
+1. Calculate NTLM hash
+2. Username
+3. Nonce
+4. Response (Encrypted nonce)
+5. Response, username, and nonce
+6. Encrypt nonce with NTLM hash of user and compare to response
+7. Approve authentication
+
+first step, the computer calculates a cryptographic hash, called the NTLM hash, from the user's password
+the client computer sends the username to the server, which returns a random value called the nonce or challenge
+The client then encrypts the nonce using the NTLM hash, now known as a response, and sends it to the server.
+The server forwards the response along with the username and the nonce to the domain controller.
+validation is then performed by the domain controller, since it already knows the NTLM hash of all users.
+domain controller encrypts the nonce itself with the NTLM hash of the supplied username and compares it to the response it received from the server
+NTLM cannot be reversed
+can be cracked quickly using modest equipment
+hashcat

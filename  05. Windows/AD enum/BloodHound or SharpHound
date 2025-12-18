@@ -1,0 +1,20 @@
+BloodHound / SharpHound
+sharphound is the collector, and bloodhound is the visualizer
+(sharphound)
+​
+cd .\Downloads\
+powershell -ep bypass
+Import-Module .\Sharphound.ps1
+Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\stephanie\Desktop\ -OutputPrefix "corp_audit"
+​
+(bloodhound)
+sudo neo4j start
+neo4j // it is
+bloodhound
+* load the zip folder
+* may need to refresh
+​
+(analysis >> click on)
+find all domain admins
+shortest path to domain admins >> click on domain >> right click on users and systems and mark them as "owned"
+shoftest path to domain admin from own principal

