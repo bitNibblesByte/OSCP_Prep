@@ -1,0 +1,25 @@
+Scripts/Tools
+{fpdns} can also fingerprint the server
+{DNSRecon} is also another DNS enumeration script to use
+dnsrecon -d website.com -D list.txt -t brt
+{DNSenum}
+dnsenum website.com
+Enumeration
+dig version.bind CHAOS TXT @DIG
+nmap -n --script "(default and *dns*) or fcrdns or dns-srv-enum or dns-random-txid or dns-random-srcport" <IP>
+for ip in $(cat list.txt); do host $ip.website.com; done
+for ip in (sec200254); dohost51.222.169.ip;done | grep -v "not found"
+nslookup -type=TXT info.website.com <IP>
+(PS) Test-NetConnection -Port 445 x.x.x.x
+(PS) 1..1024 | % {echo ((New-Object Net.Sockets.TcpClient).Connect("x.x.x.x", $_)) "TCP port $_ is open"} 2>$null
+
+
+
+Zone Transfer
+DNS Reverse BF
+Active Directory servers
+
+
+
+References:
+https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns

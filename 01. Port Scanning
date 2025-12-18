@@ -1,0 +1,39 @@
+There are many port scanning tools to use. The golden standard is {nmap} however it's pretty slow compared to other tools.
+
+nmap -Pn -A -n -p- -T4 -r -oN output_name x.x.x.x
+nmap -sU -A -T4 -p- -Pn -r -oN udp_output_name x.x.x.x
+nmap -p- -sC -sV x.x.x.x --open -oN filename
+nmap -Pn -A -n -p- -oN winprep_nmap 192.168.213.250
+
+rustscan -a 192.168.245.247 -r 1-65535 -u 5000 -- -sC -sV -o vm00_rust.txt
+rustscan -a x.x.x.x -- -A -sC -Pn -o rust.txt
+
+Some alternate port scanners are:
+{MASSCAN}
+
+Port Knocking
+Nothing on the nmap scan? But you found a cool and strange sequence of numbers?
+Lets try Port knocking.
+
+https://en.wikipedia.org/wiki/Port_knocking
+In computer networking, port knocking is a method of externally opening ports on a firewall by generating a connection attempt on a set of pre-specified closed ports. Once a correct sequence of connection attempts is received, the firewall rules are dynamically modified to allow the host which sent the connection attempts to connect over specific port(s). A variant called single packet authorization (SPA) exists, where only a single "knock" is needed, consisting of an encrypted packet.
+
+https://github.com/pha5matis/Pentesting-Guide/blob/master/port_knocking.md
+When you "knock" on a port you are really just sending TCP-packets with SYN-flag to that port. The closed port will then respond with a ACK/RST. This basically means that the host has received the TCP-packet and - it ACKnolwdge it, but responds with a Reset (RST) flag.
+
+RST just means that the port is closed.
+
++ Nmap & Bash.
+for x in 4000 5000 6000; do
+nmap -Pn --host-timeout 201 --max-retries 0 -p $x $IP;
+done
+ssh User@$IP -p <port>
+
++ Netcat.
+nc 192.168.1.102 4000
+nc 192.168.1.102 5000
+nc 192.168.1.102 6000
+nc 192.168.1.102 8888
+ssh User@$IP -p <port>
+Reference
+​https://sirensecurity.io/blog/port-knocking/

@@ -1,0 +1,62 @@
+So, you got a target web application? Sweet.
+The beginning of your enumeration is going to start with Discovery.
+In other words, what the heck can I actually view, enumerate, etc?
+
+I will go into Web Application Assessments in much more detail with a sample machine in a future blog post or dedicated page.
+
+For now, export your URL immediately and localize these commands such that they are ready to launch in a *snap*.
+Before anything - are you going to be using SecLists? Hope so!
+
+https://sirensecurity.io/blog/seclists/
+cd /opt/
+git clone https://github.com/danielmiessler/SecLists.git
+
+[Nikto]
+nikto --host $URL -C all
+
+[GOBUSTER]
++ We will begin with Gobuster.
+export URL="https://example.com/"
+
++ Here are my localized commands:
+BUST DIRECTORIES:
+gobuster dir -u $URL -w /opt/SecLists/Discovery/Web-Content/raft-medium-directories.txt -k -t 30
+
+BUST FILES:
+gobuster dir -u $URL -w /opt/SecLists/Discovery/Web-Content/raft-medium-files.txt -k -t 30
+
+BUST SUB-DOMAINS:
+gobuster dns -d someDomain.com -w /opt/SecLists/Discovery/DNS/subdomains-top1million-110000.txt -t 30
+--> Make sure any DNS name you find resolves to an in-scope address before you test it.
+
+===========================================================================
+
+[WFUZZ]
+export URL="https://example.com/FUZZ"
+
+FUZZ DIRECTORIES:
+export URL="https://example.com/FUZZ/"
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/raft-medium-directories.txt --hc 404 "$URL"
+
+FUZZ FILES:
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/raft-medium-files.txt --hc 404 "$URL"
+
+AUTHENTICATED FUZZING:
+e.g.
+wfuzz -c -b "<SESSIONVARIABLE>=<SESSIONVALUE>" -z file,/opt/SecLists/Discovery/Web-Content/raft-medium-files.txt --hc 404 "$URL"
+
+
+==( FUZZ DATA AND CHECK FOR PARAMETERS )==
+export URL="https://example.com/?parameter=FUZZ
+--> and/or some combination of...
+export URL="https://example.com/?FUZZ=data
+export URL="http://192.168.190.80/console/file.php?FUZZ=../../../../../../../../etc/passwd"
+
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/burp-parameter-names.txt "$URL"
+(exclude 0 byte responses)
+wfuzz -c -z file,/opt/SecLists/Discovery/Web-Content/burp-parameter-names.txt --hh 0 "$URL"
+
++ Can I FUZZ Post Data?
+--> Yup.
+--> Example of Command Injection POST Checks:
+wfuzz -c -z file,/usr/share/wordlists/Fuzzing/command-injection.txt -d "postParameter=FUZZ" "$URL"

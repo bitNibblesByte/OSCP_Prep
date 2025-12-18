@@ -1,0 +1,12 @@
+when transfering .exe, make sure it's in Binary mode, else all your .exe's are going to be corrupted and won't run.
+binary
+*should return with "200 Type set to I."
+If anonymous / anon login is available, try anonymous // anonymous and anonymous // *blank*
+nc -nv x.x.x.x xxxx
+
+anonymous
+anonymous
+
+guest guest
+
+default users usually have the same passwords as the username

@@ -1,0 +1,14 @@
+I tried using multiple note taking tools:
+OneNote
+Only available on Windows, so when using fully implemented Kali laptop, it doesn't work
+EverNote
+doesn't come pre-installed. There's also paid option I like, but it's paid, and needs work whenever you move to a new machine or a VM.
+Cherry Tree
+only available in Linux, or USB.  I still use this to take walkthrough notes, with a premade report template.
+Obsidian
+constantly adds "picture" page whenever adding a screenshot. annoying to constantly put those picture pages into its own folder
+Joplin
+limiting when taking notes for Windows section due to $ sign triggering things incorrectly. 
+pro is that you can sync it well across different machines. I used dropbox to sync it automatically.
+Gitbook (current)
+requires internet, and when updating using slow internet, it doesn't sync well.

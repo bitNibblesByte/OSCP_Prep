@@ -1,0 +1,2 @@
+Within Kali, I tried using tmux, but found it frustrating to use when copying, especially when cells are divided vertically.
+I instead recommend using terminator, but after putting in infinite scrolling option.
